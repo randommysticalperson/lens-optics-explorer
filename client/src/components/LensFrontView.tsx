@@ -237,15 +237,19 @@ export default function LensFrontView({
       ctx.bezierCurveTo(px - pr * 0.6, py - pr / 2, px - pr * 0.6, py + pr / 2, px, py + pr);
       ctx.stroke();
     } else if (type === "concave") {
-      // Biconcave side profile
+      // Biconcave side profile — surfaces curve inward
+      const edgeOff = pr * 0.12;
       ctx.beginPath();
-      ctx.moveTo(px, py - pr);
-      ctx.bezierCurveTo(px - pr * 0.4, py - pr / 2, px - pr * 0.4, py + pr / 2, px, py + pr);
+      ctx.moveTo(px - edgeOff, py - pr);
+      ctx.bezierCurveTo(px + pr * 0.45, py - pr / 2, px + pr * 0.45, py + pr / 2, px - edgeOff, py + pr);
       ctx.stroke();
       ctx.beginPath();
-      ctx.moveTo(px, py - pr);
-      ctx.bezierCurveTo(px + pr * 0.4, py - pr / 2, px + pr * 0.4, py + pr / 2, px, py + pr);
+      ctx.moveTo(px + edgeOff, py - pr);
+      ctx.bezierCurveTo(px - pr * 0.45, py - pr / 2, px - pr * 0.45, py + pr / 2, px + edgeOff, py + pr);
       ctx.stroke();
+      // top and bottom edge lines
+      ctx.beginPath(); ctx.moveTo(px - edgeOff, py - pr); ctx.lineTo(px + edgeOff, py - pr); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(px - edgeOff, py + pr); ctx.lineTo(px + edgeOff, py + pr); ctx.stroke();
     } else {
       // Aspheric — irregular
       ctx.beginPath();

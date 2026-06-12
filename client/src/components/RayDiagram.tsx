@@ -63,16 +63,27 @@ function drawLens(ctx: CanvasRenderingContext2D, cx: number, cy: number, h: numb
     // Arrows
     drawLensArrows(ctx, cx, cy, halfH, true);
   } else if (lensType === "concave") {
-    // Biconcave lens shape
+    // Biconcave lens shape — both surfaces curve INWARD (toward center)
+    // Left surface: control points bow to the RIGHT (inward from left edge)
     ctx.beginPath();
-    ctx.moveTo(cx, cy - halfH);
-    ctx.bezierCurveTo(cx - 20, cy - halfH / 2, cx - 20, cy + halfH / 2, cx, cy + halfH);
+    ctx.moveTo(cx - 8, cy - halfH);
+    ctx.bezierCurveTo(cx + 18, cy - halfH / 2, cx + 18, cy + halfH / 2, cx - 8, cy + halfH);
+    ctx.stroke();
+    // Right surface: control points bow to the LEFT (inward from right edge)
+    ctx.beginPath();
+    ctx.moveTo(cx + 8, cy - halfH);
+    ctx.bezierCurveTo(cx - 18, cy - halfH / 2, cx - 18, cy + halfH / 2, cx + 8, cy + halfH);
+    ctx.stroke();
+    // Connect top and bottom edges with straight lines
+    ctx.beginPath();
+    ctx.moveTo(cx - 8, cy - halfH);
+    ctx.lineTo(cx + 8, cy - halfH);
     ctx.stroke();
     ctx.beginPath();
-    ctx.moveTo(cx, cy - halfH);
-    ctx.bezierCurveTo(cx + 20, cy - halfH / 2, cx + 20, cy + halfH / 2, cx, cy + halfH);
+    ctx.moveTo(cx - 8, cy + halfH);
+    ctx.lineTo(cx + 8, cy + halfH);
     ctx.stroke();
-    // Arrows
+    // Arrows pointing inward
     drawLensArrows(ctx, cx, cy, halfH, false);
   } else {
     // Aspheric — slightly irregular convex profile
