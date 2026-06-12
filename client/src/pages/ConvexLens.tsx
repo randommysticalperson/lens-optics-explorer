@@ -1,12 +1,10 @@
 /* ============================================================
    CONVEX LENS PAGE — Blueprint Lab Design
-   Plano-convex lens: one flat, one curved surface
-   Includes side ray diagram + front-view aperture visualization
+   Plano-convex lens: one flat, one curved surface — side view only
    ============================================================ */
 import { useState } from "react";
 import Navbar from "@/components/Navbar";
 import RayDiagram from "@/components/RayDiagram";
-import LensFrontView from "@/components/LensFrontView";
 
 const CONVERGING_IMG = "https://d2xsxph8kpxj0f.cloudfront.net/310519663332318761/kNpwX6QkWsy4EfjLM84DYG/converging-lens-hero-gDfNQGCspTUjnorJfiAciH.webp";
 
@@ -23,8 +21,6 @@ export default function ConvexLens() {
   const [focalLength, setFocalLength] = useState(100);
   const [objectDistance, setObjectDistance] = useState(180);
   const [objectHeight, setObjectHeight] = useState(60);
-  const [aperture, setAperture] = useState(1);
-  const [view, setView] = useState<"side" | "front">("side");
 
   const v = (focalLength * objectDistance) / (objectDistance - focalLength);
   const magnification = -(v / objectDistance);
@@ -69,28 +65,6 @@ export default function ConvexLens() {
                 Simulation Controls
               </h2>
 
-              {/* View toggle */}
-              <div className="mb-5">
-                <p className="text-xs mb-2" style={{ color: "oklch(0.60 0.04 250)" }}>View Mode</p>
-                <div className="flex gap-2">
-                  {(["side", "front"] as const).map((v) => (
-                    <button
-                      key={v}
-                      onClick={() => setView(v)}
-                      className="flex-1 py-2 rounded text-xs font-semibold transition-all duration-150 capitalize"
-                      style={{
-                        fontFamily: "'Space Grotesk', sans-serif",
-                        background: view === v ? "oklch(0.78 0.18 200)" : "oklch(0.17 0.04 250)",
-                        color: view === v ? "oklch(0.12 0.04 250)" : "oklch(0.65 0.04 250)",
-                        border: `1px solid ${view === v ? "oklch(0.78 0.18 200)" : "oklch(0.28 0.04 250)"}`,
-                      }}
-                    >
-                      {v === "side" ? "Side View" : "Front View"}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
               {[
                 { label: "Focal Length (f)", value: focalLength, min: 40, max: 160, step: 5, unit: "px", set: setFocalLength },
                 { label: "Object Distance (u)", value: objectDistance, min: 20, max: 300, step: 5, unit: "px", set: setObjectDistance },
@@ -104,16 +78,6 @@ export default function ConvexLens() {
                   <input type="range" min={min} max={max} step={step} value={value} onChange={(e) => set(Number(e.target.value))} className="w-full" style={{ accentColor: "oklch(0.78 0.18 200)" }} />
                 </div>
               ))}
-
-              {view === "front" && (
-                <div className="mb-5">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm" style={{ fontFamily: "'Space Grotesk', sans-serif", color: "oklch(0.75 0.04 250)" }}>Aperture</span>
-                    <span className="text-sm font-medium" style={{ fontFamily: "'JetBrains Mono', monospace", color: "oklch(0.78 0.18 200)" }}>{(aperture * 100).toFixed(0)}%</span>
-                  </div>
-                  <input type="range" min={0.3} max={1} step={0.05} value={aperture} onChange={(e) => setAperture(Number(e.target.value))} className="w-full" style={{ accentColor: "oklch(0.78 0.18 200)" }} />
-                </div>
-              )}
             </div>
 
             {/* Image properties */}
@@ -143,11 +107,7 @@ export default function ConvexLens() {
           {/* Canvas area */}
           <div className="lg:col-span-2 space-y-6">
             <div style={{ height: "340px" }}>
-              {view === "side" ? (
-                <RayDiagram lensType="converging" focalLength={focalLength} objectDistance={objectDistance} objectHeight={objectHeight} showVirtualRays={true} />
-              ) : (
-                <LensFrontView lensType="convex" focalLength={focalLength} aperture={aperture} animated={true} />
-              )}
+              <RayDiagram lensType="converging" focalLength={focalLength} objectDistance={objectDistance} objectHeight={objectHeight} showVirtualRays={true} />
             </div>
 
             {/* Info cards */}
@@ -161,8 +121,12 @@ export default function ConvexLens() {
                 </span>
                 For plano-convex: R₂ = ∞, so 1/f = (n−1)/R₁. With n=1.5 and R₁=100mm, f = 200mm.
               </InfoBox>
-              <InfoBox title="Front view explained">
-                The front view shows the lens aperture as seen head-on. The concentric rings represent Fresnel zones — regions where the optical path length differs by λ/2. The animated wavefronts show light converging toward the focal point.
+              <InfoBox title="Three principal rays">
+                <ol className="list-decimal list-inside space-y-1 text-sm">
+                  <li>Parallel to axis → refracts through right focal point F</li>
+                  <li>Through optical center → passes undeviated</li>
+                  <li>Through left focal F → exits parallel to axis</li>
+                </ol>
               </InfoBox>
               <InfoBox title="Real-world uses">
                 Laser beam collimation, fiber optic coupling, barcode scanners, overhead projectors, condensers in microscopes, and single-lens cameras. The flat side is placed toward the image for minimum aberration.

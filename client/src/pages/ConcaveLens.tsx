@@ -5,7 +5,6 @@
 import { useState } from "react";
 import Navbar from "@/components/Navbar";
 import RayDiagram from "@/components/RayDiagram";
-import LensFrontView from "@/components/LensFrontView";
 
 const CONCAVE_IMG = "https://d2xsxph8kpxj0f.cloudfront.net/310519663332318761/kNpwX6QkWsy4EfjLM84DYG/concave-lens-hero-HpBZkx3QqC2SNWXMmxYy4M.webp";
 
@@ -68,8 +67,6 @@ export default function ConcaveLens() {
   const [focalLength, setFocalLength] = useState(100);
   const [objectDistance, setObjectDistance] = useState(180);
   const [objectHeight, setObjectHeight] = useState(60);
-  const [view, setView] = useState<"side" | "front">("side");
-  const [aperture, setAperture] = useState(1);
 
   // For concave lens: f is negative
   const f = -focalLength;
@@ -134,23 +131,9 @@ export default function ConcaveLens() {
               >
                 Simulation Controls
               </h2>
-              <div className="mb-5">
-                <p className="text-xs mb-2" style={{ color: "oklch(0.60 0.04 250)" }}>View Mode</p>
-                <div className="flex gap-2">
-                  {(["side", "front"] as const).map((v) => (
-                    <button key={v} onClick={() => setView(v)} className="flex-1 py-2 rounded text-xs font-semibold transition-all duration-150"
-                      style={{ fontFamily: "'Space Grotesk', sans-serif", background: view === v ? "oklch(0.75 0.14 75)" : "oklch(0.17 0.04 250)", color: view === v ? "oklch(0.12 0.04 250)" : "oklch(0.65 0.04 250)", border: `1px solid ${view === v ? "oklch(0.75 0.14 75)" : "oklch(0.28 0.04 250)"}` }}>
-                      {v === "side" ? "Side View" : "Front View"}
-                    </button>
-                  ))}
-                </div>
-              </div>
               <SliderControl label="|Focal Length| (|f|)" value={focalLength} min={40} max={160} step={5} unit="px" onChange={setFocalLength} />
               <SliderControl label="Object Distance (u)" value={objectDistance} min={20} max={300} step={5} unit="px" onChange={setObjectDistance} />
               <SliderControl label="Object Height (h)" value={objectHeight} min={20} max={100} step={5} unit="px" onChange={setObjectHeight} />
-              {view === "front" && (
-                <SliderControl label="Aperture" value={aperture} min={0.3} max={1} step={0.05} unit="" onChange={setAperture} />
-              )}
             </div>
 
             {/* Image data */}
@@ -202,11 +185,7 @@ export default function ConcaveLens() {
           {/* Canvas */}
           <div className="lg:col-span-2 space-y-6">
             <div style={{ height: "340px" }}>
-              {view === "side" ? (
-                <RayDiagram lensType="concave" focalLength={f} objectDistance={objectDistance} objectHeight={objectHeight} showVirtualRays={true} />
-              ) : (
-                <LensFrontView lensType="concave" focalLength={f} aperture={aperture} animated={true} />
-              )}
+              <RayDiagram lensType="concave" focalLength={f} objectDistance={objectDistance} objectHeight={objectHeight} showVirtualRays={true} />
             </div>
 
             {/* Explanation cards */}

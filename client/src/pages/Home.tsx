@@ -4,7 +4,7 @@
    ============================================================ */
 import { Link } from "wouter";
 import Navbar from "@/components/Navbar";
-import LensFrontView from "@/components/LensFrontView";
+import RayDiagram from "@/components/RayDiagram";
 
 const HERO_BG = "https://d2xsxph8kpxj0f.cloudfront.net/310519663332318761/kNpwX6QkWsy4EfjLM84DYG/hero-bg-oS6gUMdUkVJT5tE2uWE5sh.webp";
 const CONVERGING_IMG = "https://d2xsxph8kpxj0f.cloudfront.net/310519663332318761/kNpwX6QkWsy4EfjLM84DYG/converging-lens-hero-gDfNQGCspTUjnorJfiAciH.webp";
@@ -20,7 +20,9 @@ const lensCards = [
     image: CONVERGING_IMG,
     tag: "f > 0",
     tagColor: "oklch(0.78 0.18 200)",
-    frontType: "converging" as const,
+    diagramType: "converging" as const,
+    previewF: 90,
+    previewU: 200,
   },
   {
     href: "/convex",
@@ -30,7 +32,9 @@ const lensCards = [
     image: CONVERGING_IMG,
     tag: "PLANO",
     tagColor: "oklch(0.78 0.18 200)",
-    frontType: "convex" as const,
+    diagramType: "converging" as const,
+    previewF: 100,
+    previewU: 160,
   },
   {
     href: "/concave",
@@ -40,7 +44,9 @@ const lensCards = [
     image: CONCAVE_IMG,
     tag: "f < 0",
     tagColor: "oklch(0.75 0.14 75)",
-    frontType: "concave" as const,
+    diagramType: "concave" as const,
+    previewF: -90,
+    previewU: 180,
   },
   {
     href: "/aspheric",
@@ -50,7 +56,9 @@ const lensCards = [
     image: ASPHERIC_IMG,
     tag: "ASPH",
     tagColor: "oklch(0.65 0.15 160)",
-    frontType: "aspheric" as const,
+    diagramType: "aspheric" as const,
+    previewF: 110,
+    previewU: 220,
   },
 ];
 
@@ -165,9 +173,9 @@ export default function Home() {
             {lensCards.map((card) => (
               <Link key={card.href} href={card.href}>
                 <div className="lens-card rounded-xl overflow-hidden cursor-pointer h-full" style={{ background: "oklch(0.20 0.035 250)", border: "1px solid oklch(0.28 0.04 250)" }}>
-                  {/* Front-view aperture visualization */}
+                  {/* Side-view ray diagram preview */}
                   <div className="relative h-44 overflow-hidden">
-                    <LensFrontView lensType={card.frontType} focalLength={100} aperture={0.85} animated={true} />
+                    <RayDiagram lensType={card.diagramType} focalLength={card.previewF} objectDistance={card.previewU} objectHeight={45} showVirtualRays={true} />
                     <span className="absolute top-3 right-3 px-2.5 py-1 rounded text-xs font-bold" style={{ fontFamily: "'JetBrains Mono', monospace", background: `${card.tagColor}18`, border: `1px solid ${card.tagColor}50`, color: card.tagColor }}>
                       {card.tag}
                     </span>
