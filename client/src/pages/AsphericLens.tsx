@@ -5,6 +5,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import Navbar from "@/components/Navbar";
 import RayDiagram from "@/components/RayDiagram";
+import LensFrontView from "@/components/LensFrontView";
 
 const ASPHERIC_IMG = "https://d2xsxph8kpxj0f.cloudfront.net/310519663332318761/kNpwX6QkWsy4EfjLM84DYG/aspheric-lens-hero-6dZBaSH6MKYXdsRcYVdjCL.webp";
 
@@ -199,6 +200,8 @@ export default function AsphericLens() {
   const [objectDistance, setObjectDistance] = useState(200);
   const [objectHeight, setObjectHeight] = useState(60);
   const [showAspheric, setShowAspheric] = useState(true);
+  const [view, setView] = useState<"side" | "front">("side");
+  const [aperture, setAperture] = useState(1);
 
   const v = (focalLength * objectDistance) / (objectDistance - focalLength);
   const magnification = -(v / objectDistance);
@@ -345,14 +348,20 @@ export default function AsphericLens() {
           </div>
 
           <div className="lg:col-span-2 space-y-6">
+            <div className="flex gap-2 mb-3">
+              {(["side", "front"] as const).map((v) => (
+                <button key={v} onClick={() => setView(v)} className="px-3 py-1.5 rounded text-xs font-semibold transition-all"
+                  style={{ fontFamily: "'Space Grotesk', sans-serif", background: view === v ? "oklch(0.65 0.15 160)" : "oklch(0.17 0.04 250)", color: view === v ? "oklch(0.12 0.04 250)" : "oklch(0.65 0.04 250)", border: `1px solid ${view === v ? "oklch(0.65 0.15 160)" : "oklch(0.28 0.04 250)"}` }}>
+                  {v === "side" ? "Side View" : "Front View"}
+                </button>
+              ))}
+            </div>
             <div style={{ height: "300px" }}>
-              <RayDiagram
-                lensType="aspheric"
-                focalLength={focalLength}
-                objectDistance={objectDistance}
-                objectHeight={objectHeight}
-                showVirtualRays={true}
-              />
+              {view === "side" ? (
+                <RayDiagram lensType="aspheric" focalLength={focalLength} objectDistance={objectDistance} objectHeight={objectHeight} showVirtualRays={true} />
+              ) : (
+                <LensFrontView lensType="aspheric" focalLength={focalLength} aperture={aperture} animated={true} />
+              )}
             </div>
 
             <div className="grid md:grid-cols-2 gap-4">

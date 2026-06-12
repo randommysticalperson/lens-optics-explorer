@@ -7,8 +7,12 @@ import { ThemeProvider } from "./contexts/ThemeContext";
 import Home from "./pages/Home";
 import ConvergingLens from "./pages/ConvergingLens";
 import ConcaveLens from "./pages/ConcaveLens";
+import ConvexLens from "./pages/ConvexLens";
 import AsphericLens from "./pages/AsphericLens";
 import ThinLensEquation from "./pages/ThinLensEquation";
+import CompoundLens from "./pages/CompoundLens";
+import SnellsLaw from "./pages/SnellsLaw";
+import Quiz from "./pages/Quiz";
 
 function Router() {
   return (
@@ -16,8 +20,12 @@ function Router() {
       <Route path="/" component={Home} />
       <Route path="/converging" component={ConvergingLens} />
       <Route path="/concave" component={ConcaveLens} />
+      <Route path="/convex" component={ConvexLens} />
       <Route path="/aspheric" component={AsphericLens} />
       <Route path="/equation" component={ThinLensEquation} />
+      <Route path="/compound" component={CompoundLens} />
+      <Route path="/snells" component={SnellsLaw} />
+      <Route path="/quiz" component={Quiz} />
       <Route path="/404" component={NotFound} />
       <Route component={NotFound} />
     </Switch>
